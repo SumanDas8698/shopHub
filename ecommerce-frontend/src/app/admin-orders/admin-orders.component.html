@@ -1,0 +1,98 @@
+<div class="admin-shell">
+  <div class="admin-page-head">
+    <div class="eyebrow">Admin / Fulfillment</div>
+    <h1>Manage Orders</h1>
+    <p>Update order status as they move through your fulfillment pipeline.</p>
+  </div>
+
+  <!-- Status filter tabs -->
+  <div class="status-tabs admin-card mb-3">
+    <button
+      *ngFor="let s of allStatuses"
+      class="status-tab"
+      [class.active]="activeFilter === s"
+      (click)="setFilter(s)">
+      {{ s }}
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <div class="admin-card" *ngIf="!isLoading">
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Update Status</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="orders.length === 0">
+            <tr>
+              <td colspan="8" class="text-center py-4 text-muted-mp">No orders found.</td>
+            </tr>
+          </ng-container>
+          <ng-container *ngFor="let order of orders">
+            <tr [class.expanded-row]="expandedOrderId === order.id">
+              <td><strong>#{{ order.id }}</strong></td>
+              <td>
+                <span>{{ order.customer_name }}</span><br>
+                <small class="text-muted-mp">{{ order.customer_email }}</small>
+              </td>
+              <td>{{ order.created_at | date: 'd MMM yyyy' }}</td>
+              <td><strong>&#8377;{{ order.total_amount | number }}</strong></td>
+              <td>{{ order.payment_method }}</td>
+              <td>
+                <span [class]="statusChipClass(order.status)">{{ order.status }}</span>
+              </td>
+              <td>
+                <div class="status-select-wrap">
+                  <select class="form-select form-select-sm status-select"
+                          [ngModel]="order.status"
+                          (ngModelChange)="updateStatus(order, $event)"
+                          [disabled]="updatingOrderId === order.id">
+                    <option *ngFor="let s of editableStatuses" [value]="s">{{ s }}</option>
+                  </select>
+                  <span *ngIf="updatingOrderId === order.id" class="spinner-border spinner-border-sm ms-2"></span>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-outline-secondary" (click)="toggleExpand(order.id)">
+                  <i class="bi" [class.bi-chevron-down]="expandedOrderId !== order.id" [class.bi-chevron-up]="expandedOrderId === order.id"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="expandedOrderId === order.id" class="detail-row">
+              <td colspan="8">
+                <div class="order-detail-panel">
+                  <div class="detail-items">
+                    <strong>Items:</strong>
+                    <div class="detail-item-row" *ngFor="let item of order.items">
+                      <span>{{ item.product_name }}</span>
+                      <span>× {{ item.quantity }}</span>
+                      <span>&#8377;{{ item.price * item.quantity | number }}</span>
+                    </div>
+                  </div>
+                  <div class="detail-address">
+                    <strong>Ship to:</strong>
+                    {{ order.full_name }}, {{ order.address_line }}, {{ order.city }}, {{ order.state }} - {{ order.pincode }}<br>
+                    <strong>Phone:</strong> {{ order.phone }}
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

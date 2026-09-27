@@ -1,0 +1,89 @@
+<!-- ============================================================
+     HERO BANNER
+     ============================================================ -->
+<section class="hero-banner">
+  <div class="hero-content">
+    <h1>Everything You Need,<br>Delivered Fast</h1>
+    <p>Shop electronics, fashion, home essentials and more — all in one place.</p>
+    <a routerLink="/products" class="btn btn-mp-orange btn-lg">Shop All Deals</a>
+  </div>
+</section>
+
+<div class="home-shell">
+
+  <!-- ============================================================
+       CATEGORY TILES
+       ============================================================ -->
+  <section class="category-tiles" *ngIf="categories.length">
+    <div class="cat-tile" *ngFor="let cat of categories" (click)="goToCategory(cat.slug)">
+      <div class="cat-tile-icon">
+        <i class="bi bi-box-seam-fill"></i>
+      </div>
+      <span>{{ cat.name }}</span>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TRUST STRIP
+       ============================================================ -->
+  <section class="trust-strip">
+    <div class="trust-item">
+      <i class="bi bi-truck"></i>
+      <div><strong>Free Delivery</strong><small>On orders above &#8377;499</small></div>
+    </div>
+    <div class="trust-item">
+      <i class="bi bi-arrow-counterclockwise"></i>
+      <div><strong>Easy Returns</strong><small>7-day return policy</small></div>
+    </div>
+    <div class="trust-item">
+      <i class="bi bi-shield-check"></i>
+      <div><strong>Secure Payments</strong><small>100% protected checkout</small></div>
+    </div>
+    <div class="trust-item">
+      <i class="bi bi-headset"></i>
+      <div><strong>24/7 Support</strong><small>Always here to help</small></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FEATURED PRODUCTS
+       ============================================================ -->
+  <section class="featured-section">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="section-title mb-0">Featured Products</h2>
+      <a routerLink="/products" class="see-all-link">See All <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border" role="status"></div>
+    </div>
+
+    <div class="product-grid" *ngIf="!isLoading">
+      <div class="product-card" *ngFor="let product of featuredProducts" [routerLink]="['/product', product.id]">
+        <div class="product-card-img">
+          <img [src]="imageSrc(product.image_url)" [alt]="product.name" loading="lazy">
+          <span class="discount-badge" *ngIf="discountPercent(product)">{{ discountPercent(product) }}% OFF</span>
+        </div>
+        <div class="product-card-body">
+          <p class="product-name">{{ product.name }}</p>
+          <div class="stars">
+            <i class="bi" *ngFor="let filled of starArray(product.rating)"
+               [class.bi-star-fill]="filled" [class.bi-star]="!filled" [class.star-off]="!filled"></i>
+            <span class="rating-count">({{ product.rating_count }})</span>
+          </div>
+          <div class="price-row">
+            <span class="price">&#8377;{{ product.price | number }}</span>
+            <span class="price-mrp" *ngIf="product.mrp">&#8377;{{ product.mrp | number }}</span>
+          </div>
+          <button class="btn btn-mp-yellow btn-sm w-100 mt-2" (click)="addToCart(product, $event)">
+            <i class="bi bi-cart-plus"></i> Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && featuredProducts.length === 0" class="text-center py-5 text-muted-mp">
+      No products available yet. Check back soon!
+    </div>
+  </section>
+</div>

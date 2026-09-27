@@ -1,0 +1,63 @@
+<div class="cart-shell" *ngIf="!isLoading">
+
+  <div class="cart-items-panel">
+    <h2 class="cart-heading">Shopping Cart</h2>
+
+    <div *ngIf="cart.length === 0" class="empty-cart">
+      <i class="bi bi-cart-x"></i>
+      <h4>Your cart is empty</h4>
+      <p>Looks like you haven't added anything yet.</p>
+      <a routerLink="/products" class="btn btn-mp-yellow">Start Shopping</a>
+    </div>
+
+    <div class="cart-line" *ngFor="let item of cart">
+      <a [routerLink]="['/product', item.product_id]" class="cart-line-img">
+        <img [src]="imageSrc(item.image_url)" [alt]="item.name">
+      </a>
+      <div class="cart-line-info">
+        <a [routerLink]="['/product', item.product_id]" class="cart-line-name">{{ item.name }}</a>
+        <p class="cart-line-stock" [class.low]="item.stock <= 5">
+          {{ item.stock > 0 ? item.stock + ' in stock' : 'Out of stock' }}
+        </p>
+        <div class="cart-line-controls">
+          <div class="qty-stepper">
+            <button (click)="decreaseQty(item)" [disabled]="item.quantity <= 1">&minus;</button>
+            <span>{{ item.quantity }}</span>
+            <button (click)="increaseQty(item)" [disabled]="item.quantity >= item.stock">+</button>
+          </div>
+          <button class="remove-link" (click)="remove(item)">
+            <i class="bi bi-trash"></i> Remove
+          </button>
+        </div>
+      </div>
+      <div class="cart-line-price">
+        &#8377;{{ item.price * item.quantity | number }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Order summary -->
+  <aside class="cart-summary-panel" *ngIf="cart.length > 0">
+    <h5>Order Summary</h5>
+    <div class="summary-row">
+      <span>Items ({{ totalItems }})</span>
+      <span>&#8377;{{ subtotal | number }}</span>
+    </div>
+    <div class="summary-row">
+      <span>Delivery</span>
+      <span class="text-success-mp">FREE</span>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-row summary-total">
+      <span>Order Total</span>
+      <span>&#8377;{{ subtotal | number }}</span>
+    </div>
+    <button class="btn btn-mp-orange btn-lg w-100 mt-3" (click)="proceedToCheckout()">
+      Proceed to Checkout
+    </button>
+  </aside>
+</div>
+
+<div *ngIf="isLoading" class="text-center py-5">
+  <div class="spinner-border" role="status"></div>
+</div>

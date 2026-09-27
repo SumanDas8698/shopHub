@@ -1,0 +1,16 @@
+<div class="success-shell">
+  <div class="success-card">
+    <div class="success-icon">
+      <i class="bi bi-check-circle-fill"></i>
+    </div>
+    <h2>Order Placed Successfully!</h2>
+    <p class="success-msg">Thank you for shopping with us. Your order has been confirmed.</p>
+    <p class="order-id-line" *ngIf="orderId">
+      Order ID: <strong>#{{ orderId }}</strong>
+    </p>
+    <div class="success-actions">
+      <a routerLink="/order-history" class="btn btn-mp-yellow">View My Orders</a>
+      <a routerLink="/products" class="btn btn-outline-secondary">Continue Shopping</a>
+    </div>
+  </div>
+</div>

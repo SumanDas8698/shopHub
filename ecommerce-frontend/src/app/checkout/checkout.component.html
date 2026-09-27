@@ -1,0 +1,105 @@
+<div class="checkout-shell" *ngIf="!isLoading">
+
+  <div class="checkout-form-panel">
+    <h2 class="checkout-heading"><i class="bi bi-truck"></i> Delivery Address</h2>
+
+    <form (submit)="$event.preventDefault()">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" [(ngModel)]="form.full_name" name="full_name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-control" [(ngModel)]="form.phone" name="phone" placeholder="10-digit mobile number" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Address</label>
+        <textarea class="form-control" rows="2" [(ngModel)]="form.address_line" name="address_line"
+                  placeholder="House no., street, locality" required></textarea>
+      </div>
+
+      <div class="form-row form-row-3">
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <input type="text" class="form-control" [(ngModel)]="form.city" name="city" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">State</label>
+          <input type="text" class="form-control" [(ngModel)]="form.state" name="state" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pincode</label>
+          <input type="text" class="form-control" [(ngModel)]="form.pincode" name="pincode" required>
+        </div>
+      </div>
+    </form>
+
+    <h2 class="checkout-heading mt-4"><i class="bi bi-credit-card"></i> Payment Method</h2>
+    <div class="payment-options">
+      <div class="payment-option" [class.selected]="form.payment_method === 'COD'" (click)="selectPayment('COD')">
+        <i class="bi bi-cash-stack"></i>
+        <div>
+          <strong>Cash on Delivery</strong>
+          <small>Pay when your order arrives</small>
+        </div>
+      </div>
+      <div class="payment-option" [class.selected]="form.payment_method === 'UPI'" (click)="selectPayment('UPI')">
+        <i class="bi bi-phone"></i>
+        <div>
+          <strong>UPI</strong>
+          <small>Pay using any UPI app</small>
+        </div>
+      </div>
+      <div class="payment-option" [class.selected]="form.payment_method === 'Card'" (click)="selectPayment('Card')">
+        <i class="bi bi-credit-card-2-front"></i>
+        <div>
+          <strong>Credit / Debit Card</strong>
+          <small>Visa, Mastercard, RuPay</small>
+        </div>
+      </div>
+      <p class="payment-note" *ngIf="form.payment_method !== 'COD'">
+        <i class="bi bi-info-circle"></i> This is a demo checkout — no real payment will be processed.
+      </p>
+    </div>
+  </div>
+
+  <!-- Order summary -->
+  <aside class="checkout-summary-panel">
+    <h5>Order Summary</h5>
+    <div class="summary-item" *ngFor="let item of cart">
+      <img [src]="imageSrc(item.image_url)" [alt]="item.name">
+      <div class="summary-item-info">
+        <span class="summary-item-name">{{ item.name }}</span>
+        <span class="summary-item-qty">Qty: {{ item.quantity }}</span>
+      </div>
+      <span class="summary-item-price">&#8377;{{ item.price * item.quantity | number }}</span>
+    </div>
+
+    <div class="summary-divider"></div>
+    <div class="summary-row">
+      <span>Items ({{ totalItems }})</span>
+      <span>&#8377;{{ subtotal | number }}</span>
+    </div>
+    <div class="summary-row">
+      <span>Delivery</span>
+      <span class="text-success-mp">FREE</span>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-row summary-total">
+      <span>Order Total</span>
+      <span>&#8377;{{ subtotal | number }}</span>
+    </div>
+
+    <button class="btn btn-mp-orange btn-lg w-100 mt-3" [disabled]="isPlacingOrder" (click)="placeOrder()">
+      <span *ngIf="!isPlacingOrder">Place Order</span>
+      <span *ngIf="isPlacingOrder"><span class="spinner-border spinner-border-sm"></span> Placing Order...</span>
+    </button>
+  </aside>
+</div>
+
+<div *ngIf="isLoading" class="text-center py-5">
+  <div class="spinner-border" role="status"></div>
+</div>

@@ -1,0 +1,353 @@
+/* ==========================================================
+   GLOBAL DESIGN SYSTEM — Marketplace style
+   Inspired by the dense, trustworthy, conversion-first visual
+   language of major marketplaces: dark utility header, orange
+   CTA accent, white product cards, rating stars, price badges.
+   ========================================================== */
+
+:root {
+  /* Brand */
+  --header-dark: #131921;
+  --header-dark-2: #232f3e;
+  --accent: #f3a847;
+  --accent-hover: #e09636;
+  --accent-dark: #c7791f;
+
+  /* Surfaces */
+  --page-bg: #f0f2f2;
+  --surface: #ffffff;
+  --border: #d5d9d9;
+  --border-light: #e3e6e6;
+
+  /* Text */
+  --text: #0f1111;
+  --text-secondary: #565959;
+  --text-muted: #757575;
+  --link: #007185;
+  --link-hover: #c45500;
+
+  /* Status */
+  --success: #067d62;
+  --success-bg: #e8f5e9;
+  --danger: #cc0c39;
+  --danger-bg: #fdeaea;
+  --warning: #b95c00;
+  --warning-bg: #fff3e0;
+  --info: #0d6efd;
+
+  /* Shape */
+  --radius: 4px;
+  --radius-lg: 8px;
+  --shadow-sm: 0 1px 3px rgba(15, 17, 17, 0.12);
+  --shadow-md: 0 2px 8px rgba(15, 17, 17, 0.15);
+  --shadow-lg: 0 8px 24px rgba(15, 17, 17, 0.18);
+
+  /* Type */
+  --font-base: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--page-bg);
+  color: var(--text);
+  font-family: var(--font-base);
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.container {
+  max-width: 1500px;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ---------- Buttons (marketplace style: amber CTA, not the default Bootstrap blue) ---------- */
+.btn {
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  font-size: 13px;
+  border: 1px solid transparent;
+}
+
+.btn-primary,
+.btn-mp-yellow {
+  background: linear-gradient(to bottom, #f7dfa5, var(--accent));
+  border-color: var(--accent-dark);
+  color: var(--text);
+}
+.btn-primary:hover,
+.btn-mp-yellow:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-dark);
+  color: var(--text);
+}
+.btn-primary:focus,
+.btn-mp-yellow:focus {
+  box-shadow: 0 0 0 3px rgba(243, 168, 71, 0.5);
+}
+
+.btn-mp-orange {
+  background: linear-gradient(to bottom, #f5a35c, #eb7c1e);
+  border-color: #a85d12;
+  color: #fff;
+  font-weight: 600;
+}
+.btn-mp-orange:hover {
+  background: #df7411;
+  color: #fff;
+}
+
+.btn-outline-secondary {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn-danger {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- Star rating ---------- */
+.stars {
+  color: var(--accent-dark);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.stars .star-off {
+  color: var(--border);
+}
+.rating-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--success);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+/* ---------- Price ---------- */
+.price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+.price-mrp {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  font-size: 13px;
+  margin-left: 6px;
+}
+.price-discount {
+  color: var(--success);
+  font-weight: 700;
+  font-size: 13px;
+  margin-left: 6px;
+}
+
+/* ---------- Status chips ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.chip-placed   { background: #e7f0fe; color: #1a56c4; }
+.chip-processing { background: var(--warning-bg); color: var(--warning); }
+.chip-shipped  { background: #e9e3fb; color: #5c33c9; }
+.chip-delivered{ background: var(--success-bg); color: var(--success); }
+.chip-cancelled{ background: var(--danger-bg); color: var(--danger); }
+
+/* ---------- Forms ---------- */
+.form-control, .form-select {
+  border-radius: var(--radius);
+  border-color: var(--border);
+  font-size: 14px;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(243, 168, 71, 0.35);
+}
+.form-label {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+/* ---------- Utility ---------- */
+.text-muted-mp { color: var(--text-muted); }
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c8c8c8;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* Focus visibility for accessibility */
+a:focus-visible, button:focus-visible, .btn:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+}
+
+/* ==========================================================
+   SHARED AUTH CARD (login / register pages)
+   ========================================================== */
+.auth-shell {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 36px 32px;
+  max-width: 420px;
+  width: 100%;
+}
+.auth-card .auth-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.auth-card .auth-logo i {
+  color: var(--accent-dark);
+}
+.auth-card .auth-logo .accent {
+  color: var(--accent-dark);
+}
+.auth-card h2 {
+  text-align: center;
+  font-size: 1.3rem;
+  margin: 0 0 22px;
+}
+.auth-card .form-group {
+  margin-bottom: 16px;
+}
+.auth-card .btn {
+  width: 100%;
+  padding: 11px;
+  font-size: 14px;
+}
+.auth-card .auth-switch {
+  text-align: center;
+  font-size: 13px;
+  margin-top: 18px;
+  color: var(--text-secondary);
+}
+.auth-card .auth-divider {
+  border-top: 1px solid var(--border-light);
+  margin: 20px 0;
+}
+.auth-card .auth-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 14px;
+}
+
+/* ==========================================================
+   SHARED ADMIN PANEL LAYOUT
+   ========================================================== */
+.admin-shell {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+.admin-page-head {
+  margin-bottom: 22px;
+}
+.admin-page-head .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 4px;
+}
+.admin-page-head h1 {
+  font-size: 1.5rem;
+  margin: 0 0 4px;
+}
+.admin-page-head p {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 13.5px;
+}
+.admin-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.admin-card + .admin-card {
+  margin-top: 18px;
+}
+.admin-card h6 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+.optional-tag {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+}

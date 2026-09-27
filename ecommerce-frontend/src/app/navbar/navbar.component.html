@@ -1,0 +1,115 @@
+<!-- ============================================================
+     TOP UTILITY BAR — logo, search, account, orders, cart
+     ============================================================ -->
+<header class="mp-header">
+  <div class="mp-header-inner">
+
+    <!-- Logo -->
+    <a routerLink="/" class="mp-logo" aria-label="ShopHub Home">
+      <i class="bi bi-bag-check-fill"></i>
+      <span>Shop<span class="mp-logo-accent">Hub</span></span>
+    </a>
+
+    <!-- Deliver-to (decorative, marketplace-authentic touch) -->
+    <div class="mp-deliver d-none d-lg-flex">
+      <i class="bi bi-geo-alt-fill"></i>
+      <div class="mp-deliver-text">
+        <small>Deliver to</small>
+        <strong>Your Location</strong>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <form class="mp-search" (submit)="onSearch(); $event.preventDefault()">
+      <input
+        type="text"
+        placeholder="Search for products, brands and more"
+        [(ngModel)]="searchTerm"
+        name="searchTerm"
+        aria-label="Search products"
+      />
+      <button type="submit" aria-label="Search">
+        <i class="bi bi-search"></i>
+      </button>
+    </form>
+
+    <!-- Account / Orders / Cart -->
+    <div class="mp-actions">
+
+      <!-- Admin menu (only when admin logged in) -->
+      <div class="mp-action-item dropdown" *ngIf="isAdminLoggedIn">
+        <a class="mp-action-link dropdown-toggle" href="javascript:void(0)" data-bs-toggle="dropdown">
+          <small>Admin</small>
+          <strong>{{ currentAdmin?.username }}</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end mp-dropdown">
+          <li><a class="dropdown-item" routerLink="/admin-dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+          <li><a class="dropdown-item" routerLink="/upload-product"><i class="bi bi-plus-square"></i> Add Product</a></li>
+          <li><a class="dropdown-item" routerLink="/admin-products"><i class="bi bi-box-seam"></i> Manage Products</a></li>
+          <li><a class="dropdown-item" routerLink="/admin-orders"><i class="bi bi-receipt"></i> Manage Orders</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="javascript:void(0)" (click)="logoutAdmin()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+        </ul>
+      </div>
+
+      <!-- User account menu -->
+      <div class="mp-action-item dropdown" *ngIf="!isAdminLoggedIn">
+        <a class="mp-action-link dropdown-toggle" href="javascript:void(0)" data-bs-toggle="dropdown">
+          <small>{{ isUserLoggedIn ? ('Hello, ' + firstName) : 'Hello, sign in' }}</small>
+          <strong>Account &amp; Lists</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end mp-dropdown">
+          <ng-container *ngIf="!isUserLoggedIn">
+            <li><a class="dropdown-item" routerLink="/user-login"><i class="bi bi-box-arrow-in-right"></i> Sign In</a></li>
+            <li><a class="dropdown-item" routerLink="/user-register"><i class="bi bi-person-plus"></i> Create Account</a></li>
+          </ng-container>
+          <ng-container *ngIf="isUserLoggedIn">
+            <li><a class="dropdown-item" routerLink="/order-history"><i class="bi bi-receipt"></i> Your Orders</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="javascript:void(0)" (click)="logoutUser()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+          </ng-container>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" routerLink="/admin-login"><i class="bi bi-shield-lock"></i> Admin Login</a></li>
+        </ul>
+      </div>
+
+      <!-- Orders shortcut -->
+      <a class="mp-action-item mp-action-link d-none d-md-flex" routerLink="/order-history" *ngIf="isUserLoggedIn && !isAdminLoggedIn">
+        <small>Returns</small>
+        <strong>&amp; Orders</strong>
+      </a>
+
+      <!-- Cart -->
+      <a class="mp-action-item mp-cart-link" routerLink="/cart" *ngIf="!isAdminLoggedIn">
+        <span class="mp-cart-icon-wrap">
+          <i class="bi bi-cart3"></i>
+          <span class="mp-cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+        </span>
+        <strong class="d-none d-md-inline">Cart</strong>
+      </a>
+
+      <!-- Mobile menu toggle -->
+      <button class="mp-mobile-toggle d-lg-none" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     CATEGORY STRIP
+     ============================================================ -->
+<nav class="mp-category-strip" [class.mp-open]="isMobileMenuOpen">
+  <a routerLink="/products" class="mp-cat-link mp-all-link">
+    <i class="bi bi-grid-3x3-gap-fill"></i> All Categories
+  </a>
+  <a *ngFor="let cat of categories"
+     href="javascript:void(0)"
+     class="mp-cat-link"
+     (click)="goToCategory(cat.slug)">
+    {{ cat.name }}
+  </a>
+  <a routerLink="/order-history" class="mp-cat-link mp-cat-extra" *ngIf="isUserLoggedIn && !isAdminLoggedIn">
+    <i class="bi bi-receipt"></i> Your Orders
+  </a>
+</nav>

@@ -1,0 +1,128 @@
+<div class="admin-shell">
+  <div class="admin-page-head">
+    <div class="eyebrow">Admin / Catalog</div>
+    <h1>Manage Products</h1>
+    <p>Edit pricing, stock, and details. Or remove products from the storefront.</p>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="admin-toolbar admin-card">
+    <input type="text" class="form-control search-input" placeholder="Search by name or category…"
+           [(ngModel)]="searchTerm" (input)="applySearch()">
+    <a routerLink="/upload-product" class="btn btn-mp-orange">
+      <i class="bi bi-plus-circle"></i> Add Product
+    </a>
+  </div>
+
+  <!-- Spinner -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <!-- Table -->
+  <div class="admin-card mt-0" *ngIf="!isLoading">
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th width="60">Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>MRP</th>
+            <th>Stock</th>
+            <th>Rating</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="filteredProducts.length === 0">
+            <td colspan="8" class="text-center py-4 text-muted-mp">No products found.</td>
+          </tr>
+          <tr *ngFor="let p of filteredProducts">
+            <td>
+              <div class="table-img">
+                <img [src]="imageSrc(p.image_url)" [alt]="p.name">
+              </div>
+            </td>
+            <td>
+              <strong class="product-name-cell">{{ p.name }}</strong>
+            </td>
+            <td><span class="cat-pill">{{ p.category_name || '—' }}</span></td>
+            <td>&#8377;{{ p.price | number }}</td>
+            <td>
+              <span *ngIf="p.mrp">&#8377;{{ p.mrp | number }}</span>
+              <span *ngIf="!p.mrp" class="text-muted-mp">—</span>
+            </td>
+            <td>
+              <span class="stock-badge" [class.low]="p.stock <= 5" [class.out]="p.stock === 0">
+                {{ p.stock }}
+              </span>
+            </td>
+            <td>
+              <span class="rating-badge">&#9733; {{ p.rating }}</span>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-secondary" (click)="openEdit(p)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-danger ms-2" (click)="delete(p)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-backdrop-custom" *ngIf="showEditModal" (click)="closeEdit()">
+  <div class="edit-modal" (click)="$event.stopPropagation()">
+    <div class="edit-modal-head">
+      <h5>Edit Product</h5>
+      <button class="modal-close-btn" (click)="closeEdit()">&times;</button>
+    </div>
+    <div class="edit-modal-body">
+      <div class="form-group">
+        <label class="form-label">Product Name</label>
+        <input type="text" class="form-control" [(ngModel)]="editForm.name" name="editName">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" rows="2" [(ngModel)]="editForm.description" name="editDesc"></textarea>
+      </div>
+      <div class="edit-form-row">
+        <div class="form-group">
+          <label class="form-label">Price (&#8377;)</label>
+          <input type="number" min="0" class="form-control" [(ngModel)]="editForm.price" name="editPrice">
+        </div>
+        <div class="form-group">
+          <label class="form-label">MRP (&#8377;)</label>
+          <input type="number" min="0" class="form-control" [(ngModel)]="editForm.mrp" name="editMrp">
+        </div>
+      </div>
+      <div class="edit-form-row">
+        <div class="form-group">
+          <label class="form-label">Stock</label>
+          <input type="number" min="0" class="form-control" [(ngModel)]="editForm.stock" name="editStock">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-select" [(ngModel)]="editForm.category_id" name="editCat">
+            <option [ngValue]="null">— No Category —</option>
+            <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="edit-modal-foot">
+      <button class="btn btn-outline-secondary" (click)="closeEdit()">Cancel</button>
+      <button class="btn btn-mp-orange" [disabled]="isUpdating" (click)="saveEdit()">
+        <span *ngIf="!isUpdating">Save Changes</span>
+        <span *ngIf="isUpdating"><span class="spinner-border spinner-border-sm"></span> Saving...</span>
+      </button>
+    </div>
+  </div>
+</div>

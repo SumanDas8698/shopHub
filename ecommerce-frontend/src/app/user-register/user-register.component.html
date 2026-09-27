@@ -1,0 +1,49 @@
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <i class="bi bi-bag-check-fill"></i> Shop<span class="accent">Hub</span>
+    </div>
+    <h2>Create Your Account</h2>
+
+    <form (ngSubmit)="register()">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-control" name="name" [(ngModel)]="name" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" name="email" [(ngModel)]="email" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-control" name="password" [(ngModel)]="password" required>
+        <div class="form-text" style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">
+          Minimum 6 characters.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" class="form-control" name="confirmPassword" [(ngModel)]="confirmPassword" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Address <span style="color: var(--text-muted); font-weight: 400;">(optional)</span></label>
+        <textarea class="form-control" rows="2" name="address" [(ngModel)]="address"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-mp-yellow" [disabled]="isSubmitting">
+        <span *ngIf="!isSubmitting">Create Account</span>
+        <span *ngIf="isSubmitting"><span class="spinner-border spinner-border-sm"></span> Creating...</span>
+      </button>
+    </form>
+
+    <div class="auth-divider"></div>
+
+    <p class="auth-switch">
+      Already have an account? <a routerLink="/user-login">Sign in</a>
+    </p>
+  </div>
+</div>

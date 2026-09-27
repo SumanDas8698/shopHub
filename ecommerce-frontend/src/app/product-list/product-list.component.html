@@ -1,0 +1,113 @@
+<div class="listing-shell">
+
+  <!-- ============================================================
+       FILTER SIDEBAR
+       ============================================================ -->
+  <aside class="filter-sidebar">
+    <div class="filter-block">
+      <h6>Category</h6>
+      <button class="filter-cat" [class.active]="!activeCategory" (click)="selectCategory('')">
+        All Categories
+      </button>
+      <button
+        class="filter-cat"
+        *ngFor="let cat of categories"
+        [class.active]="activeCategory === cat.slug"
+        (click)="selectCategory(cat.slug)">
+        {{ cat.name }}
+      </button>
+    </div>
+
+    <div class="filter-block">
+      <h6>Max Price: &#8377;{{ selectedMaxPrice | number }}</h6>
+      <input
+        type="range"
+        min="0"
+        [max]="maxPrice"
+        step="100"
+        [(ngModel)]="selectedMaxPrice"
+        (change)="onFilterChange()"
+        class="price-slider">
+    </div>
+
+    <div class="filter-block">
+      <h6>Customer Rating</h6>
+      <div class="rating-filter" *ngFor="let r of [4, 3, 2, 1]">
+        <label>
+          <input type="radio" name="minRating" [value]="r" [(ngModel)]="minRating" (change)="onFilterChange()">
+          {{ r }}&#9733; &amp; above
+        </label>
+      </div>
+      <div class="rating-filter">
+        <label>
+          <input type="radio" name="minRating" [value]="0" [(ngModel)]="minRating" (change)="onFilterChange()">
+          All Ratings
+        </label>
+      </div>
+    </div>
+
+    <button class="btn btn-outline-secondary btn-sm w-100" (click)="clearFilters()">
+      Clear Filters
+    </button>
+  </aside>
+
+  <!-- ============================================================
+       RESULTS
+       ============================================================ -->
+  <section class="results-area">
+    <div class="results-header">
+      <div>
+        <span class="results-count" *ngIf="!isLoading">{{ visibleProducts.length }} results</span>
+        <span *ngIf="activeSearch"> for "<strong>{{ activeSearch }}</strong>"</span>
+      </div>
+      <div class="sort-control">
+        <label>Sort by:</label>
+        <select [(ngModel)]="sortBy" (change)="onFilterChange()" class="form-select form-select-sm">
+          <option value="newest">Newest</option>
+          <option value="price_low">Price: Low to High</option>
+          <option value="price_high">Price: High to Low</option>
+          <option value="rating">Customer Rating</option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border" role="status"></div>
+    </div>
+
+    <div class="results-grid" *ngIf="!isLoading">
+      <div class="result-card" *ngFor="let product of visibleProducts" [routerLink]="['/product', product.id]">
+        <div class="result-card-img">
+          <img [src]="imageSrc(product.image_url)" [alt]="product.name" loading="lazy">
+          <span class="discount-badge" *ngIf="discountPercent(product)">{{ discountPercent(product) }}% OFF</span>
+          <span class="out-of-stock-badge" *ngIf="product.stock <= 0">Out of Stock</span>
+        </div>
+        <div class="result-card-body">
+          <p class="product-name">{{ product.name }}</p>
+          <div class="stars">
+            <i class="bi" *ngFor="let filled of starArray(product.rating)"
+               [class.bi-star-fill]="filled" [class.bi-star]="!filled" [class.star-off]="!filled"></i>
+            <span class="rating-count">({{ product.rating_count }})</span>
+          </div>
+          <div class="price-row">
+            <span class="price">&#8377;{{ product.price | number }}</span>
+            <span class="price-mrp" *ngIf="product.mrp">&#8377;{{ product.mrp | number }}</span>
+            <span class="price-discount" *ngIf="discountPercent(product)">{{ discountPercent(product) }}% off</span>
+          </div>
+          <button
+            class="btn btn-mp-yellow btn-sm w-100 mt-2"
+            [disabled]="product.stock <= 0"
+            (click)="addToCart(product, $event)">
+            <i class="bi bi-cart-plus"></i> {{ product.stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && visibleProducts.length === 0" class="text-center py-5 text-muted-mp">
+      <i class="bi bi-search" style="font-size: 2rem;"></i>
+      <p class="mt-2">No products match your filters.</p>
+      <button class="btn btn-outline-secondary btn-sm" (click)="clearFilters()">Clear Filters</button>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,33 @@
+.success-shell {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+.success-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 50px 30px;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+.success-icon i {
+  font-size: 4rem;
+  color: var(--success);
+}
+.success-card h2 {
+  margin: 18px 0 8px;
+}
+.success-msg {
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+.order-id-line {
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+.success-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
